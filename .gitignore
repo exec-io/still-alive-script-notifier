@@ -1,0 +1,4 @@
+.gitconfig
+*.gem
+Gemfile.lock
+.rvmrc
