@@ -1,0 +1,52 @@
+#!/usr/bin/env ruby
+
+require 'script_notifier'
+
+worker_queue_uri       = ARGV[0]
+
+if ARGV[2] == '--pid'
+  unless ARGV.length > 3
+    raise "Please provide a pid file when specifying --pid"
+  else
+    pid_file_name = ARGV[3]
+    puts pid_file_name
+    if File.exists?(pid_file_name)
+      stale_pid_file = File.open(pid_file_name,'r')
+      stale_pid      = stale_pid_file.read
+      stale_pid_file.close
+      if %x[ ps axo pid|grep #{stale_pid}].empty?
+        File.delete(pid_file_name)
+      else
+        raise "PID file exists, and matching process #{stale_pid} is running"
+        exit
+      end
+    end
+    puts 'creating pid file'
+    pid_file = File.open(pid_file_name,"w")
+    pid_file << $$
+    pid_file.close
+  end
+end
+
+unless notification_queue_uri.present?
+  raise ArgumentError, "Must supply a uri for notification queue\n" +
+                     "e.g.\n\n" +
+                     "    script_notifier tcp://127.0.0.1:6010\n"
+end
+
+notifier = ScriptNotifier::Base.new(:notification_queue_uri => notification_queue_uri)
+
+trap("INT") do
+  if notifier.running?
+    puts "Finishing current job, Ctrl-C again to terminate immediately."
+    notifier.stop_running!
+  else
+    puts "Shutting down immediately."
+    notifier.shut_down!
+    exit
+  end
+end
+
+notifier.run!
+
+
