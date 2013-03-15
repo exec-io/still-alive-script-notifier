@@ -21,12 +21,12 @@ Install ScriptNotifier as follows:
 To run:
 
     $ export SCRIPT_SINK_ENV=production
-    $ bundle exec bin/script_notifier notification_queue_uri
+    $ bundle exec bin/script_notifier notification_queue_uri /path/to/config.yml
 
 The URI is required, for example:
 
     $ export SCRIPT_SINK_ENV=production
-    $ script_notifier tcp://localhost:6010
+    $ script_notifier tcp://127.0.0.1:6010 /path/to/config.yml
 
 
 Operation

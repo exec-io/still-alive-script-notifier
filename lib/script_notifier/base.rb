@@ -8,6 +8,14 @@ module ScriptNotifier
 
     cattr_reader :context, :notification_queue
 
+    # Gather Config
+    def self.setup_config(config_yml = nil)
+      config_yml ||= File.join(File.expand_path('../', __FILE__), '../../config/', 'config.yml')
+      config = YAML::load(File.read(config_yml))
+
+      StillAliveService.setup_config(config)
+    end
+
     @@running = true
 
     def self.running?
