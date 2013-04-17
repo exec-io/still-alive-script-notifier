@@ -37,12 +37,71 @@ ScriptNotifier is the way that StillAlive as a system sends out alerts to users
 ScriptSink dumps notification messages to the ScriptNotifier queue as the following JSON hash:
 
     {
+      'script_id': 1,
+      'site_name': 'My Site',
+      'script_name': 'My Script',
+      'failure_message', 'Could not find ABC on the page',
+      'failure_step', 3,
+      'notifications': [
+        {
+          'type': 'sms',
+          'address': '+61432124194'
+        },
+        {
+          'type': 'sms',
+          'address': '+61432124200'
+        },
+        {
+          'type': 'email',
+          'address': 'mikel@example.com'
+        },
+        {
+          'type': 'email',
+          'address': 'bob@example.org'
+        },
+      ]
     }
 
-Once the ScriptNotifier gets a notification, it simply sends it to StillAiveService gem for
-processing and sending outwards.
+Once the ScriptNotifier gets a notification, it sends out the notifications required.  Once done it
+sends back to ScriptSink the following JSON message:
 
-It then pulls the next notification from the queue.
+    {
+      'script_id': 1,
+      'site_name': 'My Site',
+      'script_name': 'My Script',
+      'failure_message', 'Could not find ABC on the page',
+      'failure_step', 3,
+      'notifications': [
+        {
+          'type': 'sms',
+          'address': '+61432124194',
+          'success': true,
+          'sent_at': 'TIMESTAMP'
+        },
+        {
+          'type': 'sms',
+          'address': '+61432124200'
+          'success': false,
+          'sent_at': 'TIMESTAMP',
+          'error': 'Some error message'
+        },
+        {
+          'type': 'email',
+          'address', 'mikel@example.com'
+          'success': true,
+          'sent_at': 'TIMESTAMP'
+        },
+        {
+          'type': 'email',
+          'address', 'bob@example.org'
+          'success': false,
+          'sent_at': 'TIMESTAMP',
+          'error': 'Some error message'
+        },
+      ]
+    }
+
+Which then get written to the database by ScriptSink into the Notifcations table.
 
 
 Development

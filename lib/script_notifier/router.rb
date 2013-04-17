@@ -4,7 +4,7 @@ module ScriptNotifier
   require "uri"
   require 'active_support/core_ext/class/attribute_accessors'
 
-  class Base
+  class Router
 
     cattr_reader :context, :notification_queue
 
@@ -27,7 +27,7 @@ module ScriptNotifier
     end
 
     def self.setup_queues(opts = {})
-      ScriptNotifier.log('Setting up queues')
+      ScriptNotifier.log("#{Time.now}: Setting up queues")
       @@context = ZMQ::Context.new(1)
 
       notification_queue_uri = (opts[:notification_queue_uri] || "tcp://127.0.0.1:6000")
@@ -38,22 +38,22 @@ module ScriptNotifier
     end
 
     def self.run!
-      ScriptNotifier.log("Ready to receive requests #{Time.now}")
-      message = ''
+      ScriptNotifier.log("#{Time.now}: Ready to receive requests")
 
       while running? do
         process!
       end
 
       shut_down!
-      ScriptNotifier.log("Received Shutdown at #{Time.now}")
+      ScriptNotifier.log("#{Time.now}: Received Shutdown")
     end
 
     def self.process!
       $0 = "script_notifier - Ready to receive notifications since #{Time.now.to_i}"
       message = get_next_notification_message
       $0 = "script_notifier - received message - processing since #{Time.now.to_i}"
-      process_notification(message)
+      message = process_notification(message)
+      send_results(message)
     end
 
     def self.get_next_notification_message
@@ -65,9 +65,36 @@ module ScriptNotifier
     def self.process_notification(message_string)
       message = JSON.parse(message_string)
 
-      StillAliveService.new.process(message)
+      ScriptNotifier.log("#{Time.now}: Got message #{message.inspect}")
+
+      send_notifications(message)
     rescue => ex
-      ScriptNotifier.log "Error processing message #{ex}"
+      ScriptNotifier.log "#{Time.now}: Error processing message #{message} got exception #{ex}"
+    end
+
+    def self.send_results(message)
+      
+    end
+
+    def self.send_notifications(message)
+      message['notifications'].each_with_index do |notification, idx|
+        case notification['type']
+        when 'sms'
+          result = Service::Sms.new(message)
+          message['notifications'][idx].merge!(result)
+        when 'email'
+          Service::Email.new(message)
+          message['notifications'][idx].merge!(result)
+        when 'twitter'
+          Service::Twitter.new(message)
+          message['notifications'][idx].merge!(result)
+        else
+          ScriptNotifier.log("#{Time.now}: Don't have a #{notification['type']} service to use")
+          result = {'success' => false, 'sent_at' => Time.now, 'error' => "Could not process #{notification['type']} alerts at this time"}
+          message['notifications'][idx].merge!(result)
+        end
+      end
+      message
     end
 
     def self.shut_down!
