@@ -46,7 +46,7 @@ describe ScriptNotifier::Processor do
 
   context "routing the notification to the handler" do
     it "sends the notifications hash to Services class" do
-      ScriptNotifier::Services::Base.should_receive(:deliver!).with(sample_message).once.and_return(sample_result)
+      ScriptNotifier::Router.should_receive(:deliver!).with(sample_message).once.and_return(sample_result)
       subject.send(:route, sample_message).should == sample_result
     end
   end

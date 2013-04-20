@@ -83,7 +83,7 @@ module ScriptNotifier
     end
 
     def route(notifications)
-      Services::Base.deliver!(notifications)
+      Router.deliver!(notifications)
     end
 
     def shut_down!
