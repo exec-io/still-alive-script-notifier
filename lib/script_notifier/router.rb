@@ -46,19 +46,19 @@ module ScriptNotifier
 
     def process!
       $0 = "script_notifier - Ready to receive notifications since #{Time.now.to_i}"
-      message = get_next_notification_message
+      notifications = get_next_notification
 
-      # Error in getting a message, return and half execution
-      return nil if message.blank?
+      # Error in getting a message, return and halt execution
+      return nil if notifications.blank?
 
       $0 = "script_notifier - Received notice - processing since #{Time.now.to_i}"
-      message = process_notification(message)
+      result = route(notifications)
 
       $0 = "script_notifier - Sending notice result - processing since #{Time.now.to_i}"
-      send_results(message)
+      send_result(result)
     end
 
-    def get_next_notification_message
+    def get_next_notification
       json = receive_message_from_queue
       JSON.parse(json)
     rescue => ex
@@ -71,7 +71,7 @@ module ScriptNotifier
       message_string
     end
 
-    def send_results(message)
+    def send_result(message)
       ScriptNotifier.log("#{Time.now}: Sending result of notice #{message.inspect}")
       send_message_to_queue(message.to_json)
     rescue => ex
@@ -82,25 +82,8 @@ module ScriptNotifier
       result_queue.send_string(message_string)
     end
 
-    def process_notification(message)
-      message['notifications'].each_with_index do |notification, idx|
-        case notification['type']
-        when 'sms'
-          result = Service::Sms.new(message).deliver!
-          message['notifications'][idx].merge!(result)
-        when 'email'
-          result = Service::Email.new(message).deliver!
-          message['notifications'][idx].merge!(result)
-        when 'twitter'
-          result = Service::Twitter.new(message).deliver!
-          message['notifications'][idx].merge!(result)
-        else
-          ScriptNotifier.log("#{Time.now}: Don't have a #{notification['type']} service to use")
-          result = {'success' => false, 'sent_at' => Time.now, 'error' => "Can not process #{notification['type']} alerts at this time"}
-          message['notifications'][idx].merge!(result)
-        end
-      end
-      message
+    def route(notifications)
+      Services::Base.deliver!(notifications)
     end
 
     def shut_down!
