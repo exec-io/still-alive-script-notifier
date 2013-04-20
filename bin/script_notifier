@@ -2,8 +2,9 @@
 
 require 'script_notifier'
 
-worker_queue_uri       = ARGV[0]
-config_path            = ARGV[1]
+notice_queue_uri       = ARGV[0]
+result_queue_uri       = ARGV[1]
+config_path            = ARGV[2]
 
 if ARGV[2] == '--pid'
   unless ARGV.length > 3
@@ -29,15 +30,14 @@ if ARGV[2] == '--pid'
   end
 end
 
-unless notification_queue_uri.present? && config_path.present?
-  raise ArgumentError, "Must supply a uri for notification queue and the path to the working config a\n" +
+unless notice_queue_uri.present? && resul_queue_uri.present? && config_path.present?
+  raise ArgumentError, "Must supply a uri for notice queue, result queue and the path to the working config a\n" +
                        "sample of which can be found in the gem under the config directory\n" +
                        "e.g.\n\n" +
-                       "    script_notifier tcp://127.0.0.1:6010 /path/to/config.yml\n"
+                       "    script_notifier tcp://127.0.0.1:5558 tcp://127.0.0.1:5559 /path/to/config.yml\n"
 end
 
 ScriptNotifier::Base.setup_config(config_path)
-notifier = ScriptNotifier::Base.new(:notification_queue_uri => notification_queue_uri)
 
 trap("INT") do
   if notifier.running?

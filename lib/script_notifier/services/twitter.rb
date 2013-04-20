@@ -1,4 +1,9 @@
 module ScriptNotifier
-  class Service::Twitter < Service::Base
+  module Services
+    class Twitter < Services::Base
+      def deliver!
+        {}
+      end
+    end
   end
 end

@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
   s.add_dependency('ffi-rzmq', "~> 0.9.6")
   s.add_dependency('json', "~> 1.5.4")
   s.add_dependency('activesupport', "~> 3.2.12")
+  s.add_dependency('airbrake')
 
   s.add_development_dependency("rspec", "~> 2.8.0")
   s.add_development_dependency("rake", "~> 0.9.2")

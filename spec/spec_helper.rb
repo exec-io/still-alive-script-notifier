@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 ENV['debug'] = 'test' unless ENV['debug']
-ENV['SCRIPT_SINK_ENV'] = 'test'
+ENV['SCRIPT_NOTIFIER_ENV'] = 'test'
 
 unless defined?(SPEC_ROOT)
   SPEC_ROOT = File.join(File.dirname(__FILE__))
