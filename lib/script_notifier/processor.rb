@@ -1,7 +1,7 @@
 # encoding: utf-8
 module ScriptNotifier
 
-  class Router
+  class Processor
 
     attr_reader :context, :notice_queue, :result_queue, :running
 

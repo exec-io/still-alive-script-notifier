@@ -13,7 +13,7 @@ module ScriptNotifier
 
   require 'script_notifier/version'
   require 'script_notifier/base'
-  require 'script_notifier/router'
+  require 'script_notifier/processor'
   require 'script_notifier/services/base'
   require 'script_notifier/services/sms'
   require 'script_notifier/services/email'

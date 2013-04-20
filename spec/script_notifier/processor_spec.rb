@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe ScriptNotifier::Router do
+describe ScriptNotifier::Processor do
 
   it "has a run! method" do
     subject.should respond_to(:run!)
