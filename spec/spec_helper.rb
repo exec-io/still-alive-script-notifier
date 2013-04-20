@@ -10,6 +10,7 @@ end
 # Load in our code
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
+require 'timecop'
 require 'script_notifier'
 require File.join(SPEC_ROOT, 'support/sample_messages')
 
