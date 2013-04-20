@@ -11,7 +11,8 @@ end
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
 require 'script_notifier'
+require File.join(SPEC_ROOT, 'support/sample_messages')
 
 RSpec.configure do |config|
-
+  config.include SampleMessages
 end
