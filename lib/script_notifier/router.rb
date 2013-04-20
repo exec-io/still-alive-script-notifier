@@ -3,19 +3,25 @@ module ScriptNotifier
 
   class Router
 
-    def self.deliver!(message)
-      script_data, notifications = extract(message)
+    def initialize(message)
+      @message = message
+    end
+
+    def deliver!
+      script_data, notifications = extract(@message)
       route!(script_data, notifications)
     end
 
-    def self.extract(message)
+    private
+
+    def extract(message)
       notifications = message['notifications']
       script_data = message.reject { |k,v| k == 'notifications' }
       return [script_data, notifications]
     end
 
-    def self.route!(script_data, notifications)
-      notifications.each_with_index do |notification, index|
+    def route!(script_data, notifications)
+      @notifications.each_with_index do |notification, index|
         case notification['type']
         when 'sms'
           result = Service::Sms.new(script_data, notification).deliver!
@@ -33,12 +39,5 @@ module ScriptNotifier
       notifications
     end
 
-    def initialize(message)
-
-    end
-
-    def deliver!
-      raise NotImplementedError
-    end
   end
 end
