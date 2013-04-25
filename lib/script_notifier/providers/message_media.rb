@@ -9,7 +9,7 @@ module ScriptNotifier
       class EmptyScriptNameError < StandardError; end
       class RecipientBlockedError < StandardError; end
 
-      class Service < ::Handsoap::Service
+      class Provider < ::Handsoap::Service
 
         endpoint({ :uri => 'http://soap.m4u.com.au/', :version => 1 })
 

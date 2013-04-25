@@ -27,4 +27,8 @@ module ScriptNotifier
       STDOUT.flush
     end
   end
+
+  def self.rescue_action_and_report(exception, message)
+    Airbrake.notify(e, :parameters => message)
+  end
 end

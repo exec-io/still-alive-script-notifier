@@ -1,13 +1,13 @@
 require 'spec_helper'
 
-describe ScriptNotifier::Providers::MessageMedia::Service do
+describe ScriptNotifier::Providers::MessageMedia::Provider do
 
   def stub_response(filename)
     body = File.read(File.join(SPEC_ROOT, 'support', 'soap_responses', filename))
     stub_request(:post, "http://soap.m4u.com.au/").to_return(:body => body)
   end
 
-  let(:klass)  { ScriptNotifier::Providers::MessageMedia::Service }
+  let(:klass)  { ScriptNotifier::Providers::MessageMedia::Provider }
 
   describe "sending an alert" do
 

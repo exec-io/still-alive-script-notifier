@@ -45,19 +45,23 @@ ScriptSink dumps notification messages to the ScriptNotifier queue as the follow
       'notifications': [
         {
           'type': 'sms',
-          'address': '+61432124194'
+          'address': '+61432124194',
+          'user_id': 111
         },
         {
           'type': 'sms',
           'address': '+61432124200'
+          'user_id': 222
         },
         {
           'type': 'email',
           'address': 'mikel@example.com'
+          'user_id': 111
         },
         {
           'type': 'email',
           'address': 'bob@example.org'
+          'user_id': 222
         },
       ]
     }
@@ -75,33 +79,41 @@ sends back to ScriptSink the following JSON message:
         {
           'type': 'sms',
           'address': '+61432124194',
+          'user_id': 111,
           'success': true,
-          'sent_at': Time.now.utc.iso8601
+          'sent_at': '2013-04-25T02:43:42Z',
         },
         {
           'type': 'sms',
           'address': '+61432124200'
+          'user_id': 222,
           'success': false,
-          'sent_at': Time.now.utc.iso8601,
-          'error': 'Some error message'
+          'sent_at': '2013-04-25T02:43:42Z',
+          'error': { 'message': 'ERROR: we could not deliver to +61432124200, please check the number and update your settings.',
+                     'type': 'InvalidRecipient'
+                   }
         },
         {
           'type': 'email',
           'address', 'mikel@example.com'
+          'user_id': 111,
           'success': true,
-          'sent_at': Time.now.utc.iso8601
+          'sent_at': '2013-04-25T02:43:42Z'
         },
         {
           'type': 'email',
           'address', 'bob@example.org'
+          'user_id': 222,
           'success': false,
-          'sent_at': Time.now.utc.iso8601,
-          'error': 'Some error message'
+          'sent_at': '2013-04-25T02:43:42Z',
+          'error': { 'message': 'ERROR: we could not deliver to bob@example.org, please check the number and update your settings.',
+                     'type': 'InvalidRecipient'
+                   }
         },
       ]
     }
 
-Which then get written to the database by ScriptSink into the Notifcations table.
+Which then get written to the database by ScriptSink into the Notifcations table.  Time stamps are in iso8601 format (`Time.now.utc.iso8601`)
 
 
 Development
