@@ -76,26 +76,26 @@ sends back to ScriptSink the following JSON message:
           'type': 'sms',
           'address': '+61432124194',
           'success': true,
-          'sent_at': 'TIMESTAMP'
+          'sent_at': Time.now.utc.iso8601
         },
         {
           'type': 'sms',
           'address': '+61432124200'
           'success': false,
-          'sent_at': 'TIMESTAMP',
+          'sent_at': Time.now.utc.iso8601,
           'error': 'Some error message'
         },
         {
           'type': 'email',
           'address', 'mikel@example.com'
           'success': true,
-          'sent_at': 'TIMESTAMP'
+          'sent_at': Time.now.utc.iso8601
         },
         {
           'type': 'email',
           'address', 'bob@example.org'
           'success': false,
-          'sent_at': 'TIMESTAMP',
+          'sent_at': Time.now.utc.iso8601,
           'error': 'Some error message'
         },
       ]

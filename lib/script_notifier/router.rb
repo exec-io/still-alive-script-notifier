@@ -33,7 +33,7 @@ module ScriptNotifier
         Services::Twitter.new(@script_data, notification).deliver!
       else
         ScriptNotifier.log("#{Time.now}: Don't have a #{notification['type']} service to use")
-        {'success' => false, 'sent_at' => Time.now, 'error' => "Can not process \"#{notification['type']}\" alerts at this time"}
+        {'success' => false, 'sent_at' => Time.now.utc.iso8601, 'error' => "Can not process \"#{notification['type']}\" alerts at this time"}
       end
     end
 

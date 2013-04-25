@@ -31,13 +31,13 @@ module SampleMessages
           'type' => 'sms',
           'address' => '+61432124194',
           'success' => true,
-          'sent_at' => '201303120012'
+          'sent_at' => Time.now.utc.iso8601
         },
         {
           'type' => 'email',
           'address' => 'mikel@example.com',
           'success' => true,
-          'sent_at' => '201303120012'
+          'sent_at' => Time.now.utc.iso8601
         }
       ]
     }.merge!(params)

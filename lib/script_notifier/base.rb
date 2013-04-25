@@ -4,7 +4,7 @@ require 'airbrake'
 module ScriptNotifier
 
   class Base
-    cattr_reader :notice_queue_uri, :result_queue_uri
+    cattr_reader :notice_queue_uri, :result_queue_uri, :message_media_user_id, :message_media_password
 
     # Gather Config
     def self.setup_config(config_yml = nil)
@@ -16,8 +16,11 @@ module ScriptNotifier
       config_yml ||= File.join(File.expand_path('../', __FILE__), '../../config/', 'config.yml')
       config = YAML::load(File.read(config_yml))
 
-      @@notice_queue_uri = config['notice_queue_uri'] || 'tcp://127.0.0.1:5558'
-      @@result_queue_uri = config['result_queue_uri'] || 'tcp://127.0.0.1:5559'
+      @@notice_queue_uri       = config['notice_queue_uri'] || 'tcp://127.0.0.1:5558'
+      @@result_queue_uri       = config['result_queue_uri'] || 'tcp://127.0.0.1:5559'
+      @@message_media_user_id  = config['username']
+      @@message_media_password = config['password']
+
     end
   end
 end

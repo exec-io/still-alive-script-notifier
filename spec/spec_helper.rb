@@ -11,6 +11,7 @@ end
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
 require 'timecop'
+require 'webmock/rspec'
 require 'script_notifier'
 require File.join(SPEC_ROOT, 'support/sample_messages')
 

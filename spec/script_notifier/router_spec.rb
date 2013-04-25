@@ -4,6 +4,7 @@ require 'spec_helper'
 describe ScriptNotifier::Router do
 
   let(:subject) { ScriptNotifier::Router.new(sample_message) }
+  let(:sent_at) { Time.now.utc.iso8601 }
 
   it "instantiates" do
     expect { ScriptNotifier::Router.new({}) }.to_not raise_error
@@ -27,7 +28,7 @@ describe ScriptNotifier::Router do
     end
 
     it "merges the result given from sending the notification into the return hash" do
-      subject.should_receive(:send_notification).exactly(2).times.and_return({'success' => true, 'sent_at' => '201303120012'})
+      subject.should_receive(:send_notification).exactly(2).times.and_return({'success' => true, 'sent_at' => sent_at})
       result = subject.deliver!
       result.should == sample_result
     end
@@ -65,7 +66,7 @@ describe ScriptNotifier::Router do
         time = Time.now
         Timecop.freeze(time) do
           result = subject.send(:send_notification, notification)
-          result.should eq({'success' => false, 'sent_at' => time, 'error' => 'Can not process "unknown" alerts at this time'})
+          result.should eq({'success' => false, 'sent_at' => time.utc.iso8601, 'error' => 'Can not process "unknown" alerts at this time'})
         end
       end
 

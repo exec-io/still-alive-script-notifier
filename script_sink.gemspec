@@ -27,11 +27,15 @@ Gem::Specification.new do |s|
   s.add_dependency('json', "~> 1.5.4")
   s.add_dependency('activesupport', "~> 3.2.12")
   s.add_dependency('airbrake')
+  s.add_dependency('curb', '~> 0.7.16')
+  s.add_dependency('handsoap', '~> 1.1.7')
+  s.add_dependency('nokogiri', '~> 1.5.0')
 
   s.add_development_dependency("rspec", "~> 2.8.0")
   s.add_development_dependency("rake", "~> 0.9.2")
   s.add_development_dependency("bundler", "~> 1.0")
   s.add_development_dependency("timecop")
+  s.add_development_dependency('webmock', "~> 1.7.10")
 
   s.require_path = 'lib'
 end
