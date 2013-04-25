@@ -4,7 +4,9 @@ require 'airbrake'
 module ScriptNotifier
 
   class Base
-    cattr_reader :notice_queue_uri, :result_queue_uri, :message_media_user_id, :message_media_password
+    cattr_reader :notice_queue_uri, :result_queue_uri,
+                 :message_media_user_id, :message_media_password,
+                 :smtp_settings, :email_from_domain
 
     # Gather Config
     def self.setup_config(config_yml = nil)
@@ -21,6 +23,8 @@ module ScriptNotifier
       @@message_media_user_id  = config['username']
       @@message_media_password = config['password']
 
+      @@email_settings         = config['email_settings']
+      @@email_from_domain      = config['email_from_domain']
     end
   end
 end

@@ -31,17 +31,11 @@ describe ScriptNotifier::Services::Sms do
     let(:address)         { notification['address'] }
     let(:failure_message) { script_data['failure_message'] }
     let(:sms_provider)    { ScriptNotifier::Providers::MessageMedia::Provider }
-    let(:result_message)  { "StillAlive FAIL: '#{failure_message}' on script #{script_data['script_name']} for site #{script_data['site_name']}" }
     
-    context "successfully" do
+    context "without error from the provider" do
 
       before(:each) do
         sms_provider.stub!(:send_alert_text_message!)
-      end
-
-      it "sends the address and failure message to the SMS provider class" do
-        sms_provider.should_receive(:send_alert_text_message!).with(address, result_message)
-        subject.deliver!
       end
 
       it "returns a success hash" do
@@ -50,6 +44,24 @@ describe ScriptNotifier::Services::Sms do
           subject.deliver!.should eq({ :success => true, :timestamp => time.utc.iso8601 })
         end
       end
+
+      it "sends the address and failure message to the SMS provider class if the script failed" do
+        message = "StillAlive FAIL: '#{failure_message}' on script #{script_data['script_name']} for site #{script_data['site_name']}"
+        sms_provider.should_receive(:send_alert_text_message!).with(address, message)
+        subject.deliver!
+      end
+
+      it "sends the address and success message to the SMS provider class if the script passed" do
+        message = "StillAlive PASS: Your script #{script_data['script_name']} for site #{script_data['site_name']} is now passing"
+        service = ScriptNotifier::Services::Sms.new(script_data({'failure_message' => nil}), notification)
+        sms_provider.should_receive(:send_alert_text_message!).with(address, message)
+        service.deliver!
+      end
+
+
+    end
+
+    context "with error from the provider" do
 
       it "returns an error if InvalidRecipient" do
         sms_provider.should_receive(:send_alert_text_message!).and_raise(ScriptNotifier::Providers::MessageMedia::InvalidRecipientError)
