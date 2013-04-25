@@ -40,8 +40,8 @@ ScriptSink dumps notification messages to the ScriptNotifier queue as the follow
       'script_id': 1,
       'site_name': 'My Site',
       'script_name': 'My Script',
-      'failure_message', 'Could not find ABC on the page',
-      'failure_step', 3,
+      'failure_message': 'Could not find ABC on the page',
+      'failure_step': 3,
       'notifications': [
         {
           'type': 'sms',
@@ -73,8 +73,8 @@ sends back to ScriptSink the following JSON message:
       'script_id': 1,
       'site_name': 'My Site',
       'script_name': 'My Script',
-      'failure_message', 'Could not find ABC on the page',
-      'failure_step', 3,
+      'failure_message': 'Could not find ABC on the page',
+      'failure_step': 3,
       'notifications': [
         {
           'type': 'sms',
