@@ -8,7 +8,13 @@ describe ScriptNotifier::Services::Base do
       'site_name' => 'My Site',
       'script_name' => 'My Script',
       'failure_message' => 'Could not find ABC on the page',
-      'failure_step' => 3
+      'failure_step' => 122,
+      'failure_attempts' => 4,
+      'script' => [
+        [121, 'When I go to http =>//www.example.com/'],
+        [124, 'And I click "Login"'],
+        [122, 'Then I should see "Email"']
+      ]
     }.merge!(attrs)
   end
 
@@ -34,7 +40,14 @@ describe ScriptNotifier::Services::Base do
 
     it "sets the failure_message and failure_step as attr_readers" do
       subject.failure_message.should eq('Could not find ABC on the page')
-      subject.failure_step.should eq(3)
+      subject.failure_step.should eq(122)
+      subject.failure_attempts.should eq(4)
+      subject.success.should be_false
+    end
+
+    it "sets success to true if there is no failure message" do
+      subject = ScriptNotifier::Services::Base.new(script_data({'failure_message' => nil}), notification)
+      subject.success.should be_true
     end
 
     it "sets the script name and id and site name as attr_readers" do
@@ -42,6 +55,15 @@ describe ScriptNotifier::Services::Base do
       subject.script_name.should eq('My Script')
       subject.site_name.should eq('My Site')
     end
+
+    it "sets the script steps as an attr_reader" do
+      subject.script_steps.should == [
+        [121, 'When I go to http =>//www.example.com/'],
+        [124, 'And I click "Login"'],
+        [122, 'Then I should see "Email"']
+      ]
+    end
+
 
   end
 

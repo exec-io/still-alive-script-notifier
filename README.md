@@ -41,7 +41,13 @@ ScriptSink dumps notification messages to the ScriptNotifier queue as the follow
       'site_name': 'My Site',
       'script_name': 'My Script',
       'failure_message': 'Could not find ABC on the page',
-      'failure_step': 3,
+      'failure_step_id': 122,
+      'failure_attempts': 3,
+      'script': [
+        [121, 'When I go to http://www.example.com/'],
+        [124, 'And I click "Login"'],
+        [122, 'Then I should see "Email"']
+      ],
       'notifications': [
         {
           'type': 'sms',
@@ -72,6 +78,11 @@ If the message is a success it reads:
       'script_id': 1,
       'site_name': 'My Site',
       'script_name': 'My Script',
+      'script': [
+        [121, 'When I go to http://www.example.com/'],
+        [124, 'And I click "Login"'],
+        [122, 'Then I should see "Email"']
+      ],
       'notifications': [
         {
           'type': 'sms',

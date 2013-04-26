@@ -3,7 +3,7 @@ require 'spec_helper'
 
 describe ScriptNotifier::Router do
 
-  let(:subject) { ScriptNotifier::Router.new(sample_message) }
+  let(:subject) { ScriptNotifier::Router.new(sample_error_message) }
   let(:sent_at) { Time.now.utc.iso8601 }
 
   it "instantiates" do
@@ -16,8 +16,8 @@ describe ScriptNotifier::Router do
 
   context "extracting data from the message" do
     it "extracts the script data and notifications from the message hash" do
-      subject.instance_variable_get(:@script_data).should == sample_message.delete_if { |k,v| k == 'notifications' }
-      subject.instance_variable_get(:@notifications).should == sample_message['notifications']
+      subject.instance_variable_get(:@script_data).should == sample_error_message.delete_if { |k,v| k == 'notifications' }
+      subject.instance_variable_get(:@notifications).should == sample_error_message['notifications']
     end
   end
 
