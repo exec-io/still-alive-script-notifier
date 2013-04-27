@@ -31,16 +31,12 @@ module SampleMessages
           'address' => '+61432124194'
         },
         {
-          'type' => 'sms',
-          'address' => '+61432124200'
-        },
-        {
           'type' => 'email',
           'address' => 'mikel@example.com'
         },
         {
-          'type' => 'email',
-          'address' => 'bob@example.org'
+          'type' => 'twitter',
+          'address' => '@example'
         }
       ]
     }.merge!(params)
@@ -63,16 +59,12 @@ module SampleMessages
           'address' => '+61432124194'
         },
         {
-          'type' => 'sms',
-          'address' => '+61432124200'
-        },
-        {
           'type' => 'email',
           'address' => 'mikel@example.com'
         },
         {
-          'type' => 'email',
-          'address' => 'bob@example.org'
+          'type' => 'twitter',
+          'address' => '@example'
         }
       ]
     }.merge!(params)
@@ -99,20 +91,14 @@ module SampleMessages
           'sent_at' => Time.now.utc.iso8601
         },
         {
-          'type' => 'sms',
-          'address' => '+61432124200',
-          'success' => true,
-          'sent_at' => Time.now.utc.iso8601
-        },
-        {
           'type' => 'email',
           'address' => 'mikel@example.com',
           'success' => true,
           'sent_at' => Time.now.utc.iso8601
         },
         {
-          'type' => 'email',
-          'address' => 'bob@example.org',
+          'type' => 'twitter',
+          'address' => '@example',
           'success' => true,
           'sent_at' => Time.now.utc.iso8601
         }

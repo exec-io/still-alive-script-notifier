@@ -11,10 +11,7 @@ describe ScriptNotifier::Services::Twitter do
   end
 
   def notification(attrs = {})
-    {
-      'type' => 'twitter',
-      'address' => '@lindsaar'
-    }.merge!(attrs)
+    sample_notifications.select { |n| n['type'] == 'twitter' }.first.merge!(attrs)
   end
 
   subject { ScriptNotifier::Services::Twitter.new(failure_script_result, notification) }
@@ -36,7 +33,7 @@ describe ScriptNotifier::Services::Twitter do
 
       it "returns a success hash" do
        stub_request(:post, "https://api.twitter.com/1.1/statuses/update.json").
-         with(:body => {"status"=>"@lindsaar: StillAlive FAIL: 'Could not find ABC on the page' on script My Script for site My Site"}).
+         with(:body => {"status"=>"@example: StillAlive FAIL: 'Could not find ABC on the page' on script My Script for site My Site"}).
          to_return(:status => 200, :body => "", :headers => {})
 
         time = Time.now
@@ -67,7 +64,7 @@ describe ScriptNotifier::Services::Twitter do
         Twitter.should_receive(:update).and_raise(StandardError)
         ScriptNotifier.should_receive(:rescue_action_and_report).once
 
-        error_result = { :message => "ERROR: we could not deliver to '@lindsaar' due to an internal error.",
+        error_result = { :message => "ERROR: we could not deliver to '@example' due to an internal error.",
                          :type => 'StandardError'
                        }
         time = Time.now
