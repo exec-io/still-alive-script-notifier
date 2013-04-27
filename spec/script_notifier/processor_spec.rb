@@ -18,8 +18,8 @@ describe ScriptNotifier::Processor do
   context "process! method" do
 
     it "gets the next message, processes it and sends the results when told to process!" do
-      subject.should_receive(:get_next_notification).once.and_return(sample_error_message)
-      subject.should_receive(:route).once.with(sample_error_message).and_return(sample_result)
+      subject.should_receive(:get_next_notification).once.and_return(sample_failure_message)
+      subject.should_receive(:route).once.with(sample_failure_message).and_return(sample_result)
       subject.should_receive(:send_result).once.with(sample_result)
       subject.send(:process!)
     end
@@ -34,12 +34,12 @@ describe ScriptNotifier::Processor do
 
   context "getting the next message" do
     it "returns a hash of the JSON message" do
-      subject.should_receive(:receive_message_from_queue).and_return(sample_error_message.to_json)
-      subject.send(:get_next_notification).should == sample_error_message
+      subject.should_receive(:receive_message_from_queue).and_return(sample_failure_message.to_json)
+      subject.send(:get_next_notification).should == sample_failure_message
     end
 
     it "returns nil if there is an error parsing the message" do
-      subject.should_receive(:receive_message_from_queue).and_return("invalid-json#{sample_error_message.to_json}")
+      subject.should_receive(:receive_message_from_queue).and_return("invalid-json#{sample_failure_message.to_json}")
       subject.send(:get_next_notification).should == nil
     end
   end
@@ -47,11 +47,11 @@ describe ScriptNotifier::Processor do
   context "routing the notification to the handler" do
 
     it "sends the notifications hash to Services class" do
-      router = ScriptNotifier::Router.new(sample_error_message)
+      router = ScriptNotifier::Router.new(sample_failure_message)
       ScriptNotifier::Router.should_receive(:new).once.and_return(router)
       router.should_receive(:deliver!).once.and_return(sample_result)
 
-      subject.send(:route, sample_error_message).should == sample_result
+      subject.send(:route, sample_failure_message).should == sample_result
     end
 
   end

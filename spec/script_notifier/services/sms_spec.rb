@@ -2,25 +2,19 @@ require 'spec_helper'
 
 describe ScriptNotifier::Services::Sms do
 
-  def script_data(attrs = {})
-    {
-      'script_id' => 1,
-      'site_name' => 'My Site',
-      'script_name' => 'My Script',
-      'failure_message' => 'Could not find ABC on the page',
-      'failure_step' => 3
-    }.merge!(attrs)
+  def failure_script_result(attrs = {})
+    sample_failure_script_data.merge!(attrs)
+  end
+
+  def success_script_result(attrs = {})
+    sample_success_script_data.merge!(attrs)
   end
 
   def notification(attrs = {})
-    {
-      'type' => 'sms',
-      'address' => '+61432124194',
-      'user_id' => 111
-    }.merge!(attrs)
+    sample_notifications.select { |n| n['type'] == 'sms' }.first.merge!(attrs)
   end
 
-  subject { ScriptNotifier::Services::Sms.new(script_data, notification) }
+  subject { ScriptNotifier::Services::Sms.new(failure_script_result, notification) }
 
   it "accepts script data and notificaiton hashen" do
     expect { subject }.to_not raise_error(ArgumentError)
@@ -29,7 +23,7 @@ describe ScriptNotifier::Services::Sms do
   describe "deliver!" do
 
     let(:address)         { notification['address'] }
-    let(:failure_message) { script_data['failure_message'] }
+    let(:failure_message) { failure_script_result['failure_message'] }
     let(:sms_provider)    { ScriptNotifier::Providers::MessageMedia::Provider }
     
     context "without error from the provider" do
@@ -46,14 +40,14 @@ describe ScriptNotifier::Services::Sms do
       end
 
       it "sends the address and failure message to the SMS provider class if the script failed" do
-        message = "StillAlive FAIL: '#{failure_message}' on script #{script_data['script_name']} for site #{script_data['site_name']}"
+        message = "StillAlive FAIL: '#{failure_message}' on script #{failure_script_result['script_name']} for site #{failure_script_result['site_name']}"
         sms_provider.should_receive(:send_alert_text_message!).with(address, message)
         subject.deliver!
       end
 
       it "sends the address and success message to the SMS provider class if the script passed" do
-        message = "StillAlive PASS: Your script #{script_data['script_name']} for site #{script_data['site_name']} is now passing"
-        service = ScriptNotifier::Services::Sms.new(script_data({'failure_message' => nil}), notification)
+        message = "StillAlive PASS: Your script #{success_script_result['script_name']} for site #{success_script_result['site_name']} is now passing"
+        service = ScriptNotifier::Services::Sms.new(success_script_result, notification)
         sms_provider.should_receive(:send_alert_text_message!).with(address, message)
         service.deliver!
       end

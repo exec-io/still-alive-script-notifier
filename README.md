@@ -51,23 +51,19 @@ ScriptSink dumps notification messages to the ScriptNotifier queue as the follow
       'notifications': [
         {
           'type': 'sms',
-          'address': '+61432124194',
-          'user_id': 111
+          'address': '+61432124194'
         },
         {
           'type': 'sms',
           'address': '+61432124200'
-          'user_id': 222
         },
         {
           'type': 'email',
           'address': 'mikel@example.com'
-          'user_id': 111
         },
         {
           'type': 'email',
           'address': 'bob@example.org'
-          'user_id': 222
         },
       ]
     }
@@ -87,22 +83,18 @@ If the message is a success it reads:
         {
           'type': 'sms',
           'address': '+61432124194',
-          'user_id': 111
         },
         {
           'type': 'sms',
           'address': '+61432124200'
-          'user_id': 222
         },
         {
           'type': 'email',
           'address': 'mikel@example.com'
-          'user_id': 111
         },
         {
           'type': 'email',
           'address': 'bob@example.org'
-          'user_id': 222
         },
       ]
     }
@@ -120,14 +112,12 @@ sends back to ScriptSink the following JSON message:
         {
           'type': 'sms',
           'address': '+61432124194',
-          'user_id': 111,
           'success': true,
           'sent_at': '2013-04-25T02:43:42Z',
         },
         {
           'type': 'sms',
           'address': '+61432124200'
-          'user_id': 222,
           'success': false,
           'sent_at': '2013-04-25T02:43:42Z',
           'error': { 'message': 'ERROR: we could not deliver to +61432124200, please check the number and update your settings.',
@@ -137,14 +127,12 @@ sends back to ScriptSink the following JSON message:
         {
           'type': 'email',
           'address', 'mikel@example.com'
-          'user_id': 111,
           'success': true,
           'sent_at': '2013-04-25T02:43:42Z'
         },
         {
           'type': 'email',
           'address', 'bob@example.org'
-          'user_id': 222,
           'success': false,
           'sent_at': '2013-04-25T02:43:42Z',
           'error': { 'message': 'ERROR: we could not deliver to bob@example.org, please check the number and update your settings.',
