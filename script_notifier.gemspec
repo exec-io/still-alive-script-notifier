@@ -31,6 +31,7 @@ Gem::Specification.new do |s|
   s.add_dependency('handsoap', '~> 1.1.7')
   s.add_dependency('nokogiri', '~> 1.5.0')
   s.add_dependency('mail', '~> 2.5.3')
+  s.add_dependency('twitter', '~> 4.6.2')
 
   s.require_path = 'lib'
 end
