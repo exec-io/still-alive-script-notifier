@@ -25,6 +25,8 @@ module ScriptNotifier
 
     def send_notification(notification)
       case notification['type']
+      when ScriptNotifier.test_run_mode
+        Services::Tester.new(@script_data, notification).deliver!
       when 'sms'
         Services::Sms.new(@script_data, notification).deliver!
       when 'email'

@@ -21,6 +21,14 @@ module ScriptNotifier
   require 'script_notifier/services/email'
   require 'script_notifier/services/twitter'
 
+  def self.test_run_mode
+    if ENV['SCRIPT_NOTIFIER_ENV'].to_s === 'test'
+      false 
+    else
+      true
+    end
+  end
+
   def self.log(message)
     unless ENV['SCRIPT_NOTIFIER_ENV'].to_s === 'test'
       STDOUT.puts message
