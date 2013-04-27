@@ -1,6 +1,8 @@
 module ScriptNotifier
   module Services
-    class Sms < Services::Base
+    class Sms
+
+      include Services::Base
 
       def deliver!
         begin

@@ -1,9 +1,9 @@
 module ScriptNotifier
   module Services
-    class Base
+    module Base
 
       attr_reader :site_name, :script_name, :script_steps, :script_id, :address, :success,
-                  :failure_message, :failure_step, :failure_attempts
+                  :failure_message, :failure_step_id, :failure_attempts
 
       def initialize(script_data, notification)
         @script_data  = script_data
@@ -14,7 +14,7 @@ module ScriptNotifier
         @script_name      = script_data['script_name']
         @script_steps     = script_data['script']
         @failure_message  = script_data['failure_message']
-        @failure_step     = script_data['failure_step']
+        @failure_step_id  = script_data['failure_step_id']
         @failure_attempts = script_data['failure_attempts']
         @address          = notification['address']
         @success          = @failure_message.blank?

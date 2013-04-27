@@ -1,14 +1,37 @@
 require 'spec_helper'
 
+module ScriptNotifier
+  module Services
+    class TestService
+
+      include Services::Base
+    end
+  end
+end
+
 describe ScriptNotifier::Services::Base do
 
-  def script_data(attrs = {})
+  def failure_script_data(attrs = {})
     {
       'script_id' => 1,
       'site_name' => 'My Site',
       'script_name' => 'My Script',
       'failure_message' => 'Could not find ABC on the page',
-      'failure_step' => 122,
+      'failure_step_id' => 122,
+      'failure_attempts' => 4,
+      'script' => [
+        [121, 'When I go to http =>//www.example.com/'],
+        [124, 'And I click "Login"'],
+        [122, 'Then I should see "Email"']
+      ]
+    }.merge!(attrs)
+  end
+
+  def success_script_data(attrs = {})
+    {
+      'script_id' => 1,
+      'site_name' => 'My Site',
+      'script_name' => 'My Script',
       'failure_attempts' => 4,
       'script' => [
         [121, 'When I go to http =>//www.example.com/'],
@@ -26,7 +49,7 @@ describe ScriptNotifier::Services::Base do
     }.merge!(attrs)
   end
 
-  subject { ScriptNotifier::Services::Base.new(script_data, notification) }
+  subject { ScriptNotifier::Services::TestService.new(failure_script_data, notification) }
 
   it "accepts script data and notificaiton hashen" do
     expect { subject }.to_not raise_error(ArgumentError)
@@ -40,13 +63,13 @@ describe ScriptNotifier::Services::Base do
 
     it "sets the failure_message and failure_step as attr_readers" do
       subject.failure_message.should eq('Could not find ABC on the page')
-      subject.failure_step.should eq(122)
+      subject.failure_step_id.should eq(122)
       subject.failure_attempts.should eq(4)
       subject.success.should be_false
     end
 
     it "sets success to true if there is no failure message" do
-      subject = ScriptNotifier::Services::Base.new(script_data({'failure_message' => nil}), notification)
+      subject = ScriptNotifier::Services::TestService.new(success_script_data, notification)
       subject.success.should be_true
     end
 
