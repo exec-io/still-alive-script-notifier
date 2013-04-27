@@ -1,0 +1,145 @@
+<html>
+<head>
+  <style type='text/css'>
+
+    body {
+      width: 100%;
+      background: <%= @failure_background ? '#D0A6A6' : '#A4D1D3' %>;
+    }
+
+    div.wrapper {
+      font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+      background: #fff;
+      padding: 0 0 30px;
+      margin: 0 auto;
+      width: 640px; }
+
+    img.header {
+      display: block;
+      margin: 0;
+      padding: 0;
+      background: #A4D1D3;
+    }
+
+    div.content p {
+      font-size: 16px;
+      line-height: 1.5;
+      color: #666;
+    }
+
+    div.content p strong {
+      color: #444;
+    }
+
+    h1, h2, h3 { font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+                 border-bottom: 1px solid #eee;
+                 color: #444;
+                 padding-bottom: 10px }
+
+    h1 {
+      font-size: 22px;
+    }
+
+    h2 {
+      font-size: 18px;
+      margin-top: 50px;
+    }
+
+    h4 {
+      color: #444;
+    }
+
+    a { color: #FF5B26; text }
+    a:visited { color: #FF5B26; }
+
+    a,a:visited {
+      color: #FF5B26;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    a:hover {
+      border-bottom: 1px solid #FF5B26;
+    }
+
+    ol.steps {
+      font-family: "Monaco",Courier,monospace;
+      color: #fff;
+      background: #444;
+      font-size: 14px;
+    }
+
+    ol.steps li {
+      border-top: 1px solid #333;
+      padding: 10px 0;
+    }
+
+    ol.steps li span {
+      line-height: 1.5;
+      font-size: 12px;
+      font-weight: bold;
+      font-family: "Monaco",Courier,monospace;
+    }
+
+    ol.steps li.passed span {
+      color: #494;
+    }
+
+    ol.steps li.failed span {
+      color: #944;
+    }
+
+    ol.steps li.pending span {
+      color: #994;
+    }
+
+    ol.steps li.step_item span.failure_message {
+      display: block;
+      color: #888;
+      font-size: 1em;
+    }
+
+    table {
+      text-align: left;
+      background: #e8e8e8;
+      color: #666;
+      width: 100%;
+    }
+
+    table td, table th {
+      padding: 10px;
+    }
+
+    table th {
+      color: #444;
+      width: 40%;
+    }
+
+  </style>
+</head>
+
+<body width="100%" style="padding: 0; margin: 0; width: 100%;">
+  <div class='wrapper' style="width: 640px; display: block;">
+    <img src="<%= @attachments['header.jpg'].url %>", alt='StillAlive' class='header' style='display: block; margin: 0; padding: 0;'>
+
+    <div class='content' width="590" padding="15" style="background-color: #fff; background-color: rgba(255,255,255,0.8); margin: 0 10px 10px; padding: 15px;">
+
+      <%= yield %>
+
+      <p>
+        If you have any questions, or need support, feel free to go to our
+        <a href="http://help.stillalive.com/">Help Site</a>
+        let us know, we'll be happy to help out!
+      </p>
+
+      <p>
+        Thanks!
+      </p>
+
+      <p>
+        <img src="<%= @attachments['signature.jpg'].url %>", alt='The StillAlive Team'>
+      </p>
+    </div>
+  </div>
+</body>
+</html>

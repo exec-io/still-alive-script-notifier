@@ -1,0 +1,30 @@
+<h1>Error Notification for <%= @script_name %> on <%= @site_name %>.</h1>
+
+<p>
+  We encountered an error running your script <strong><%= @script_name %></strong> against your site <%= @site_name %>.
+</p>
+
+<h2>Summary</h2>
+<p>
+  <table class='panel-header'>
+    <tr>
+      <th>Script:</th><td><%= @script_name %></td>
+    </tr>
+    <tr>
+      <th>Failed Attempts:</th><td><%= @failure_attempts %></td>
+    </tr>
+  </table>
+</p>
+
+<h2>Script Execution Details</h2>
+<p>
+  <div class="script-steps">
+    <h4>Script Steps:</h4>
+    <%= render_steps %>
+  </div>
+</p>
+
+<p>
+  You can log into your <a href="https://stillalive.com/my/dashboard">dashboard at StillAlive</a>
+  to view more about this error.
+</p>

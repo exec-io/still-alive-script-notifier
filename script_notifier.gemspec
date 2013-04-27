@@ -30,6 +30,7 @@ Gem::Specification.new do |s|
   s.add_dependency('curb', '~> 0.7.16')
   s.add_dependency('handsoap', '~> 1.1.7')
   s.add_dependency('nokogiri', '~> 1.5.0')
+  s.add_dependency('mail', '~> 2.5.3')
 
   s.require_path = 'lib'
 end

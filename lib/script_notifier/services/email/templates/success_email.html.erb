@@ -1,0 +1,25 @@
+<h1>Success Notification for <%= @script_name %> on <%= @site_name %>.</h1>
+
+<p>Your script, <strong><%= @script_name %></strong> for your site <%= @site_name %> was failing but is now passing again.</p>
+
+<h2>Summary</h2>
+<p>
+	<table>		
+		<tr>
+			<th>Prior Failed Attempts:</th><td><%= @failure_attempts %></td>
+		</tr>
+	</table>
+</p>
+
+<h2>Script Execution Details</h2>
+<p>
+  <div class="script-steps">
+    <h4>Script Steps:</h4>
+    <%= render_steps %>
+  </div>
+</p>
+
+<p>
+  You can log into your <a href="http://stillalive.com/my/dashboard">dashboard at StillAlive</a>
+  to view more about this script.
+</p>
