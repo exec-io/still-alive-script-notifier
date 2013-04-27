@@ -11,6 +11,9 @@ This makes a team of four applications:
 Decription
 --------------------------
 
+ScriptNotifier is what we use to send notifications out to our users.  This cuts down on 
+database polling a great deal.
+
 Usage
 --------------------------
 
