@@ -29,6 +29,10 @@ module ScriptNotifier
   end
 
   def self.rescue_action_and_report(exception, message)
-    Airbrake.notify(e, :parameters => message)
+    if ENV['SCRIPT_NOTIFIER_ENV'].to_s === 'test'
+      raise exception
+    else
+      Airbrake.notify(exception, :parameters => message)
+    end
   end
 end
