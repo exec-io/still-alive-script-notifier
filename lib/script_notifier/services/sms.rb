@@ -2,16 +2,19 @@ module ScriptNotifier
   module Services
     class Sms
 
+      attr_reader :address
       include Services::Base
 
       def deliver!
+        @address = payload['address']
+
         begin
           if success
             message = "StillAlive PASS: Your script #{script_name} for site #{site_name} is now passing"
           else
             message = "StillAlive FAIL: '#{failure_message}' on script #{script_name} for site #{site_name}"
           end
-          
+
           ScriptNotifier::Providers::MessageMedia::Provider.send_alert_text_message!(address, message)
           return_values = { :success => true, :timestamp => Time.now.utc.iso8601 }
 

@@ -11,7 +11,7 @@ This makes a team of four applications:
 Decription
 --------------------------
 
-ScriptNotifier is what we use to send notifications out to our users.  This cuts down on 
+ScriptNotifier is what we use to send notifications out to our users.  This cuts down on
 database polling a great deal.
 
 Usage
@@ -53,30 +53,41 @@ ScriptSink dumps notification messages to the ScriptNotifier queue as the follow
       ],
       'notifications': [
         {
-          'type': 'sms',
-          'address': '+61432124194'
+          'service': 'sms',
+          'payload': {
+            'address': '+61432124194'
+          }
         },
         {
-          'type': 'sms',
-          'address': '+61432124200'
+          'service': 'email',
+          'payload': {
+            'address': 'mikel@example.com'
+          }
         },
         {
-          'type': 'email',
-          'address': 'mikel@example.com'
+          'service': 'twitter',
+          'payload': {
+            'address': '@example'
+          }
         },
         {
-          'type': 'email',
-          'address': 'bob@example.org'
-        },
+          'service': 'campfire',
+          'payload': {
+            'api_token': 'CAMPFIRETOKEN',
+            'room': 'stillalive',
+            'subdomain': 'execio',
+            'play_sound': true
+          }
+        }
       ]
     }
-
 If the message is a success it reads:
 
     {
       'script_id': 1,
       'site_name': 'My Site',
       'script_name': 'My Script',
+      'failure_attempts': 3,
       'script': [
         [121, 'When I go to http://www.example.com/'],
         [124, 'And I click "Login"'],
@@ -84,68 +95,37 @@ If the message is a success it reads:
       ],
       'notifications': [
         {
-          'type': 'sms',
-          'address': '+61432124194',
+          'service': 'sms',
+          'payload': {
+            'address': '+61432124194'
+          }
         },
         {
-          'type': 'sms',
-          'address': '+61432124200'
+          'service': 'email',
+          'payload': {
+            'address': 'mikel@example.com'
+          }
         },
         {
-          'type': 'email',
-          'address': 'mikel@example.com'
+          'service': 'twitter',
+          'payload': {
+            'address': '@example'
+          }
         },
         {
-          'type': 'email',
-          'address': 'bob@example.org'
-        },
+          'service': 'campfire',
+          'payload': {
+            'api_token': 'CAMPFIRETOKEN',
+            'room': 'stillalive',
+            'subdomain': 'execio',
+            'play_sound': true
+          }
+        }
       ]
     }
 
 Once the ScriptNotifier gets a notification, it sends out the notifications required.  Once done it
-sends back to ScriptSink the following JSON message:
-
-    {
-      'script_id': 1,
-      'site_name': 'My Site',
-      'script_name': 'My Script',
-      'failure_message': 'Could not find ABC on the page',
-      'failure_step': 3,
-      'notifications': [
-        {
-          'type': 'sms',
-          'address': '+61432124194',
-          'success': true,
-          'sent_at': '2013-04-25T02:43:42Z',
-        },
-        {
-          'type': 'sms',
-          'address': '+61432124200'
-          'success': false,
-          'sent_at': '2013-04-25T02:43:42Z',
-          'error': { 'message': 'ERROR: we could not deliver to +61432124200, please check the number and update your settings.',
-                     'type': 'InvalidRecipient'
-                   }
-        },
-        {
-          'type': 'email',
-          'address', 'mikel@example.com'
-          'success': true,
-          'sent_at': '2013-04-25T02:43:42Z'
-        },
-        {
-          'type': 'email',
-          'address', 'bob@example.org'
-          'success': false,
-          'sent_at': '2013-04-25T02:43:42Z',
-          'error': { 'message': 'ERROR: we could not deliver to bob@example.org, please check the number and update your settings.',
-                     'type': 'InvalidRecipient'
-                   }
-        },
-      ]
-    }
-
-Which then get written to the database by ScriptSink into the Notifcations table.  Time stamps are in iso8601 format (`Time.now.utc.iso8601`)
+is done, it logs the results of the notifications directly into the database.
 
 
 Development

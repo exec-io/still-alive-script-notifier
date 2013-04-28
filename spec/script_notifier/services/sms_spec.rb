@@ -11,7 +11,7 @@ describe ScriptNotifier::Services::Sms do
   end
 
   def notification(attrs = {})
-    sample_notifications.select { |n| n['type'] == 'sms' }.first.merge!(attrs)
+    sample_notifications.select { |n| n['service'] == 'sms' }.first.merge!(attrs)
   end
 
   subject { ScriptNotifier::Services::Sms.new(failure_script_result, notification) }
@@ -22,10 +22,10 @@ describe ScriptNotifier::Services::Sms do
 
   describe "deliver!" do
 
-    let(:address)         { notification['address'] }
+    let(:address)         { notification['payload']['address'] }
     let(:failure_message) { failure_script_result['failure_message'] }
     let(:sms_provider)    { ScriptNotifier::Providers::MessageMedia::Provider }
-    
+
     context "without error from the provider" do
 
       before(:each) do

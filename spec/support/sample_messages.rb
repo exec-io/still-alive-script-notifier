@@ -27,16 +27,31 @@ module SampleMessages
       ],
       'notifications' => [
         {
-          'type' => 'sms',
-          'address' => '+61432124194'
+          'service'    => 'sms',
+          'payload'    => {
+            'address'    => '+61432124194'
+          }
         },
         {
-          'type' => 'email',
-          'address' => 'mikel@example.com'
+          'service'    => 'email',
+          'payload'    => {
+            'address'    => 'mikel@example.com'
+          }
         },
         {
-          'type' => 'twitter',
-          'address' => '@example'
+          'service'    => 'twitter',
+          'payload'    => {
+            'address'    => '@example'
+          }
+        },
+        {
+          'service'    => 'campfire',
+          'payload'    => {
+            'api_token'  => 'CAMPFIRETOKEN',
+            'room'       => 'stillalive',
+            'subdomain'  => 'execio',
+            'play_sound' => true
+          }
         }
       ]
     }.merge!(params)
@@ -55,16 +70,31 @@ module SampleMessages
       ],
       'notifications' => [
         {
-          'type' => 'sms',
-          'address' => '+61432124194'
+          'service' => 'sms',
+          'payload' => {
+            'address' => '+61432124194'
+          }
         },
         {
-          'type' => 'email',
-          'address' => 'mikel@example.com'
+          'service' => 'email',
+          'payload' => {
+            'address' => 'mikel@example.com'
+          }
         },
         {
-          'type' => 'twitter',
-          'address' => '@example'
+          'service' => 'twitter',
+          'payload' => {
+            'address' => '@example'
+          }
+        },
+        {
+          'service' => 'campfire',
+          'payload' => {
+            'room'       => 'stillalive',
+            'api_token'  => 'CAMPFIRETOKEN',
+            'subdomain'  => 'execio',
+            'play_sound' => true
+          }
         }
       ]
     }.merge!(params)
@@ -85,22 +115,39 @@ module SampleMessages
       ],
       'notifications' => [
         {
-          'type' => 'sms',
-          'address' => '+61432124194',
+          'service' => 'sms',
           'success' => true,
-          'sent_at' => Time.now.utc.iso8601
+          'sent_at' => Time.now.utc.iso8601,
+          'payload' => {
+            'address' => '+61432124194'
+          }
         },
         {
-          'type' => 'email',
-          'address' => 'mikel@example.com',
+          'service' => 'email',
           'success' => true,
-          'sent_at' => Time.now.utc.iso8601
+          'sent_at' => Time.now.utc.iso8601,
+          'payload' => {
+            'address' => 'mikel@example.com'
+          }
         },
         {
-          'type' => 'twitter',
-          'address' => '@example',
+          'service' => 'twitter',
           'success' => true,
-          'sent_at' => Time.now.utc.iso8601
+          'sent_at' => Time.now.utc.iso8601,
+          'payload' => {
+            'address' => '@example'
+          }
+        },
+        {
+          'service' => 'campfire',
+          'success' => true,
+          'sent_at' => Time.now.utc.iso8601,
+          'payload' => {
+            'api_token'  => 'CAMPFIRETOKEN',
+            'room'       => 'stillalive',
+            'subdomain'  => 'execio',
+            'play_sound' => true
+          }
         }
       ]
     }.merge!(params)

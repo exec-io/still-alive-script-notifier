@@ -12,30 +12,31 @@ module ScriptNotifier
 
     class Email
 
+      attr_reader :address
       include Services::Base
 
       def deliver!
+        @address = payload['address']
+        @help_url = 'http://help.stillalive.com/'
 
-      @help_url = 'http://help.stillalive.com/'
+        begin
+          if success
+            success_email.deliver
+          else
+            failure_email.deliver
+          end
 
-      begin
-        if success
-          success_email.deliver
-        else
-          failure_email.deliver
+          return_values = { :success => true, :timestamp => Time.now.utc.iso8601 }
+        rescue => e
+          error = {
+                    :message => "ERROR: we could not deliver to '#{address}' due to an internal error.",
+                    :type => e.class.to_s
+                  }
+          return_values = { :success => false, :timestamp => Time.now.utc.iso8601, :error => error }
+
+          error = "ScriptNotifier::Services::Email could not send message to '#{address.inspect}'"
+          ScriptNotifier.rescue_action_and_report(e, error)
         end
-
-        return_values = { :success => true, :timestamp => Time.now.utc.iso8601 }
-      rescue => e
-        error = {
-                  :message => "ERROR: we could not deliver to '#{address}' due to an internal error.",
-                  :type => e.class.to_s
-                }
-        return_values = { :success => false, :timestamp => Time.now.utc.iso8601, :error => error }
-
-        error = "ScriptNotifier::Services::Email could not send message to '#{address.inspect}'"
-        ScriptNotifier.rescue_action_and_report(e, error)
-      end
 
         return_values
       end
@@ -128,7 +129,7 @@ module ScriptNotifier
       def step_class(step)
         failed_step_index = script_steps.index { |a| a.first.to_i == failure_step_id.to_i }
         current_step_index = script_steps.index(step)
-        case 
+        case
         when failed_step_index.nil?
           "passed"
         when current_step_index < failed_step_index

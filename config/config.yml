@@ -2,8 +2,7 @@ twitter_consumer_key: EXAMPLE
 twitter_consumer_secret: EXAMPLE
 twitter_oauth_token: EXAMPLE
 twitter_oauth_token_secret: EXAMPLE
-notice_queue_uri: tcp://127.0.0.1:5558
-result_queue_uri: tcp://127.0.0.1:5559
+notice_queue_uri: tcp://127.0.0.1:6001
 message_media_username: EXAMPLE
 message_media_password: EXAMPLE
 twitter_consumer_key: EXAMPLE

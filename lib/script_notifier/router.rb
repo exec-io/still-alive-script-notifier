@@ -24,7 +24,7 @@ module ScriptNotifier
     end
 
     def send_notification(notification)
-      case notification['type']
+      case notification['service']
       when ScriptNotifier.test_run_mode
         Services::Tester.new(@script_data, notification).deliver!
       when 'sms'
@@ -34,8 +34,8 @@ module ScriptNotifier
       when 'twitter'
         Services::Twitter.new(@script_data, notification).deliver!
       else
-        ScriptNotifier.log("#{Time.now}: Don't have a #{notification['type']} service to use")
-        {'success' => false, 'sent_at' => Time.now.utc.iso8601, 'error' => "Can not process \"#{notification['type']}\" alerts at this time"}
+        ScriptNotifier.log("#{Time.now}: Don't have a #{notification['service']} service to use")
+        {'success' => false, 'sent_at' => Time.now.utc.iso8601, 'error' => "Can not process \"#{notification['service']}\" alerts at this time"}
       end
     end
 

@@ -11,16 +11,20 @@ module ScriptNotifier
     end
 
     class Twitter
+
+      attr_reader :address
       include Services::Base
 
       def deliver!
+        @address = payload['address']
+
         begin
           if success
             message = "#{address}: StillAlive PASS: Your script #{script_name} for site #{site_name} is now passing"
           else
             message = "#{address}: StillAlive FAIL: '#{failure_message}' on script #{script_name} for site #{site_name}"
           end
-          
+
           ::Twitter.update(message)
           return_values = { :success => true, :timestamp => Time.now.utc.iso8601 }
 

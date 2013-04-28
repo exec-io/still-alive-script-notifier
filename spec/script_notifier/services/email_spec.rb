@@ -15,7 +15,7 @@ describe ScriptNotifier::Services::Email do
   end
 
   def notification(attrs = {})
-    sample_notifications.select { |n| n['type'] == 'email'}.first.merge!(attrs)
+    sample_notifications.select { |n| n['service'] == 'email'}.first.merge!(attrs)
   end
 
   subject { ScriptNotifier::Services::Email.new(failure_script_result, notification) }
@@ -26,9 +26,9 @@ describe ScriptNotifier::Services::Email do
 
   describe "deliver!" do
 
-    let(:address)         { notification['address'] }
+    let(:address)         { notification['payload']['address'] }
     let(:failure_message) { script_data['failure_message'] }
-    
+
     context "on failure" do
 
       subject { ScriptNotifier::Services::Email.new(failure_script_result, notification) }
@@ -86,7 +86,7 @@ describe ScriptNotifier::Services::Email do
     end
 
     context "unsuccessfully" do
-      
+
       it "returns an error if InvalidRecipient" do
         ScriptNotifier.stub!(:rescue_action_and_report)
         Mail::Message.any_instance.stub(:deliver).and_raise(StandardError)

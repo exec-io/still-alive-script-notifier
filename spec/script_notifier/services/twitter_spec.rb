@@ -11,7 +11,7 @@ describe ScriptNotifier::Services::Twitter do
   end
 
   def notification(attrs = {})
-    sample_notifications.select { |n| n['type'] == 'twitter' }.first.merge!(attrs)
+    sample_notifications.select { |n| n['service'] == 'twitter' }.first.merge!(attrs)
   end
 
   subject { ScriptNotifier::Services::Twitter.new(failure_script_result, notification) }
@@ -22,9 +22,9 @@ describe ScriptNotifier::Services::Twitter do
 
   describe "deliver!" do
 
-    let(:address)         { notification['address'] }
+    let(:address)         { notification['payload']['address'] }
     let(:failure_message) { failure_script_result['failure_message'] }
-    
+
     context "without error from the provider" do
 
       before(:each) do
