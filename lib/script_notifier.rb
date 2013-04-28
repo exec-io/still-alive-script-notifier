@@ -20,10 +20,11 @@ module ScriptNotifier
   require 'script_notifier/services/sms'
   require 'script_notifier/services/email'
   require 'script_notifier/services/twitter'
+  require 'script_notifier/services/campfire'
 
   def self.test_run_mode
     if ENV['SCRIPT_NOTIFIER_ENV'].to_s === 'test'
-      false 
+      false
     else
       true
     end

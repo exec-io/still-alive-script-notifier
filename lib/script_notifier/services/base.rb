@@ -20,6 +20,11 @@ module ScriptNotifier
         @notification     = notification
         @payload          = notification['payload']
         @success          = @failure_message.blank?
+        after_initialize
+      end
+
+      def after_initialize
+        # Implemented in included classes
       end
 
       def deliver!

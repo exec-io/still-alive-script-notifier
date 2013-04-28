@@ -48,7 +48,7 @@ module SampleMessages
           'service'    => 'campfire',
           'payload'    => {
             'api_token'  => 'CAMPFIRETOKEN',
-            'room'       => 'stillalive',
+            'room_name'  => 'stillalive',
             'subdomain'  => 'execio',
             'play_sound' => true
           }
@@ -90,7 +90,7 @@ module SampleMessages
         {
           'service' => 'campfire',
           'payload' => {
-            'room'       => 'stillalive',
+            'room_name'  => 'stillalive',
             'api_token'  => 'CAMPFIRETOKEN',
             'subdomain'  => 'execio',
             'play_sound' => true
@@ -144,7 +144,7 @@ module SampleMessages
           'sent_at' => Time.now.utc.iso8601,
           'payload' => {
             'api_token'  => 'CAMPFIRETOKEN',
-            'room'       => 'stillalive',
+            'room_name'  => 'stillalive',
             'subdomain'  => 'execio',
             'play_sound' => true
           }
