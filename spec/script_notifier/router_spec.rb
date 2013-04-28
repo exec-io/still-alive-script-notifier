@@ -5,6 +5,7 @@ describe ScriptNotifier::Router do
 
   let(:subject) { ScriptNotifier::Router.new(sample_failure_message) }
   let(:sent_at) { Time.now.utc.iso8601 }
+  let(:notification_count) { sample_failure_message['notifications'].count }
 
   it "instantiates" do
     expect { ScriptNotifier::Router.new({}) }.to_not raise_error
@@ -23,12 +24,12 @@ describe ScriptNotifier::Router do
 
   context "delivering the messages" do
     it "sends a notification for each notification" do
-      subject.should_receive(:send_notification).exactly(4).times.and_return({})
+      subject.should_receive(:send_notification).exactly(notification_count).times.and_return({})
       subject.deliver!
     end
 
     it "merges the result given from sending the notification into the return hash" do
-      subject.should_receive(:send_notification).exactly(4).times.and_return({'success' => true, 'sent_at' => sent_at})
+      subject.should_receive(:send_notification).exactly(notification_count).times.and_return({'success' => true, 'sent_at' => sent_at})
       result = subject.deliver!
       result.should == sample_result
     end

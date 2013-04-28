@@ -34,6 +34,7 @@ Gem::Specification.new do |s|
   s.add_dependency('twitter', '~> 4.6.2')
   s.add_dependency('tinder', '~> 1.9.2')
   s.add_dependency('flowdock', '~> 0.3.1')
+  s.add_dependency('hipchat', '~> 0.8.0')
 
   s.require_path = 'lib'
 end

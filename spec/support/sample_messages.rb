@@ -59,6 +59,14 @@ module SampleMessages
             'api_token'  => 'FLOWDOCKTOKEN',
             'tags'       => ['stillalive', 'alert']
           }
+        },
+        {
+          'service' => 'hip_chat',
+          'payload' => {
+            'api_token'  => 'HIPCHATTOKEN',
+            'room_name'  => 'stillalive',
+            'notify'     => true
+          }
         }
       ]
     }.merge!(params)
@@ -108,6 +116,14 @@ module SampleMessages
           'payload' => {
             'api_token'  => 'FLOWDOCKTOKEN',
             'tags'       => ['stillalive', 'alert']
+          }
+        },
+        {
+          'service' => 'hip_chat',
+          'payload' => {
+            'api_token'  => 'HIPCHATTOKEN',
+            'room_name'  => 'stillalive',
+            'notify'     => true
           }
         }
       ]
@@ -170,6 +186,16 @@ module SampleMessages
           'payload' => {
             'api_token'  => 'FLOWDOCKTOKEN',
             'tags'       => ['stillalive', 'alert']
+          }
+        },
+        {
+          'service' => 'hip_chat',
+          'success' => true,
+          'sent_at' => Time.now.utc.iso8601,
+          'payload' => {
+            'api_token'  => 'HIPCHATTOKEN',
+            'room_name'  => 'stillalive',
+            'notify'     => true
           }
         }
       ]

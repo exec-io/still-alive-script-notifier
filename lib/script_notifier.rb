@@ -22,6 +22,7 @@ module ScriptNotifier
   require 'script_notifier/services/twitter'
   require 'script_notifier/services/campfire'
   require 'script_notifier/services/flowdock'
+  require 'script_notifier/services/hip_chat'
 
   def self.test_run_mode
     if ENV['SCRIPT_NOTIFIER_ENV'].to_s === 'test'

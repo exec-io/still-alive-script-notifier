@@ -8,6 +8,7 @@ PATH
       ffi-rzmq (~> 0.9.6)
       flowdock (~> 0.3.1)
       handsoap (~> 1.1.7)
+      hipchat (~> 0.8.0)
       json (~> 1.7.7)
       mail (~> 2.5.3)
       nokogiri (~> 1.5.0)
@@ -42,6 +43,8 @@ GEM
       multi_json
     handsoap (1.1.8)
     hashie (1.2.0)
+    hipchat (0.8.0)
+      httparty
     httparty (0.11.0)
       multi_json (~> 1.0)
       multi_xml (>= 0.5.2)
