@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    script_notifier (0.0.9)
+    script_notifier (0.0.1)
       activesupport (~> 3.2.12)
       airbrake
       curb (~> 0.7.16)
