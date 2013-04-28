@@ -52,6 +52,13 @@ module SampleMessages
             'subdomain'  => 'execio',
             'play_sound' => true
           }
+        },
+        {
+          'service' => 'flowdock',
+          'payload' => {
+            'api_token'  => 'FLOWDOCKTOKEN',
+            'tags'       => ['stillalive', 'alert']
+          }
         }
       ]
     }.merge!(params)
@@ -94,6 +101,13 @@ module SampleMessages
             'api_token'  => 'CAMPFIRETOKEN',
             'subdomain'  => 'execio',
             'play_sound' => true
+          }
+        },
+        {
+          'service' => 'flowdock',
+          'payload' => {
+            'api_token'  => 'FLOWDOCKTOKEN',
+            'tags'       => ['stillalive', 'alert']
           }
         }
       ]
@@ -147,6 +161,15 @@ module SampleMessages
             'room_name'  => 'stillalive',
             'subdomain'  => 'execio',
             'play_sound' => true
+          }
+        },
+        {
+          'service' => 'flowdock',
+          'success' => true,
+          'sent_at' => Time.now.utc.iso8601,
+          'payload' => {
+            'api_token'  => 'FLOWDOCKTOKEN',
+            'tags'       => ['stillalive', 'alert']
           }
         }
       ]

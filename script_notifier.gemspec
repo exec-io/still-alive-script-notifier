@@ -33,6 +33,7 @@ Gem::Specification.new do |s|
   s.add_dependency('mail', '~> 2.5.3')
   s.add_dependency('twitter', '~> 4.6.2')
   s.add_dependency('tinder', '~> 1.9.2')
+  s.add_dependency('flowdock', '~> 0.3.1')
 
   s.require_path = 'lib'
 end
