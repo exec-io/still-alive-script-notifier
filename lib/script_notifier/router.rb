@@ -9,10 +9,18 @@ module ScriptNotifier
     end
 
     def deliver!
+      threads = []
+
       @notifications.each_with_index do |notification, index|
-        result = send_notification(notification)
-        @notifications[index].merge!(result)
+        threads << Thread.new(notification, index) do |notification, index|
+          result = send_notification(notification)
+          @notifications[index][:sent_at] = result[:sent_at]
+          @notifications[index][:success] = result[:success]
+          @notifications[index][:error]   = result[:error] if result[:error].present?
+        end
       end
+
+      threads.each { |thread|  thread.join }
 
       @script_data.merge({:notifications => @notifications})
     end
