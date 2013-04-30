@@ -5,9 +5,9 @@ module ScriptNotifier
       include Services::Base
 
       def deliver!
-        message = "ScriptNotifier: got '#{notification['service']}' for address '#{address}' for script #{script_id}"
+        message = "ScriptNotifier: got '#{notification[:service]}' for address '#{address}' for script #{script_id}"
         log(message)
-        return_values = { :success => true, :timestamp => Time.now.utc.iso8601 }
+        return_values = { :success => true, :sent_at => Time.now.utc.iso8601 }
       end
 
     end

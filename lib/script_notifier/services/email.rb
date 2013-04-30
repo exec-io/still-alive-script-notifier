@@ -16,7 +16,7 @@ module ScriptNotifier
       include Services::Base
 
       def deliver!
-        @address = payload['address']
+        @address = payload[:address]
         @help_url = 'http://help.stillalive.com/'
 
         begin
@@ -26,13 +26,13 @@ module ScriptNotifier
             failure_email.deliver
           end
 
-          return_values = { :success => true, :timestamp => Time.now.utc.iso8601 }
+          return_values = { :success => true, :sent_at => Time.now.utc.iso8601 }
         rescue => e
           error = {
                     :message => "ERROR: we could not deliver to '#{address}' due to an internal error.",
                     :type => e.class.to_s
                   }
-          return_values = { :success => false, :timestamp => Time.now.utc.iso8601, :error => error }
+          return_values = { :success => false, :sent_at => Time.now.utc.iso8601, :error => error }
 
           error = "ScriptNotifier::Services::Email could not send message to '#{address.inspect}'"
           ScriptNotifier.rescue_action_and_report(e, error)

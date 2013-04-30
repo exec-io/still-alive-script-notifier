@@ -11,7 +11,7 @@ describe ScriptNotifier::Services::Sms do
   end
 
   def notification(attrs = {})
-    sample_notifications.select { |n| n['service'] == 'sms' }.first.merge!(attrs)
+    sample_notifications.select { |n| n[:service] == 'sms' }.first.merge!(attrs)
   end
 
   subject { ScriptNotifier::Services::Sms.new(failure_script_result, notification) }
@@ -22,8 +22,10 @@ describe ScriptNotifier::Services::Sms do
 
   describe "deliver!" do
 
-    let(:address)         { notification['payload']['address'] }
-    let(:failure_message) { failure_script_result['failure_message'] }
+    let(:address)         { notification[:payload][:address] }
+    let(:site_name)       { failure_script_result[:site_name] }
+    let(:script_name)     { failure_script_result[:script_name] }
+    let(:failure_message) { failure_script_result[:failure_message] }
     let(:sms_provider)    { ScriptNotifier::Providers::MessageMedia::Provider }
 
     context "without error from the provider" do
@@ -35,18 +37,18 @@ describe ScriptNotifier::Services::Sms do
       it "returns a success hash" do
         time = Time.now
         Timecop.freeze(time) do
-          subject.deliver!.should eq({ :success => true, :timestamp => time.utc.iso8601 })
+          subject.deliver!.should eq({ :success => true, :sent_at => time.utc.iso8601 })
         end
       end
 
       it "sends the address and failure message to the SMS provider class if the script failed" do
-        message = "StillAlive FAIL: '#{failure_message}' on script #{failure_script_result['script_name']} for site #{failure_script_result['site_name']}"
+        message = "StillAlive FAIL: '#{failure_message}' on script #{script_name} for site #{site_name}"
         sms_provider.should_receive(:send_alert_text_message!).with(address, message)
         subject.deliver!
       end
 
       it "sends the address and success message to the SMS provider class if the script passed" do
-        message = "StillAlive PASS: Your script #{success_script_result['script_name']} for site #{success_script_result['site_name']} is now passing"
+        message = "StillAlive PASS: Your script #{script_name} for site #{site_name} is now passing"
         service = ScriptNotifier::Services::Sms.new(success_script_result, notification)
         sms_provider.should_receive(:send_alert_text_message!).with(address, message)
         service.deliver!
@@ -65,7 +67,7 @@ describe ScriptNotifier::Services::Sms do
                        }
         time = Time.now
         Timecop.freeze(time) do
-          subject.deliver!.should eq({ :success => false, :timestamp => time.utc.iso8601, :error => error_result })
+          subject.deliver!.should eq({ :success => false, :sent_at => time.utc.iso8601, :error => error_result })
         end
       end
 
@@ -78,7 +80,7 @@ describe ScriptNotifier::Services::Sms do
                        }
         time = Time.now
         Timecop.freeze(time) do
-          subject.deliver!.should eq({ :success => false, :timestamp => time.utc.iso8601, :error => error_result })
+          subject.deliver!.should eq({ :success => false, :sent_at => time.utc.iso8601, :error => error_result })
         end
       end
 

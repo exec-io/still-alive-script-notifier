@@ -8,11 +8,11 @@ module ScriptNotifier
       include Services::Base
 
       def after_initialize
-        @room_name  = payload['room_name']
-        @api_token  = payload['api_token']
-        @subdomain  = payload['subdomain']
-        @play_sound = payload['play_sound'] || false
-        @sound      = payload['sound'] || 'trombone'
+        @room_name  = payload[:room_name]
+        @api_token  = payload[:api_token]
+        @subdomain  = payload[:subdomain]
+        @play_sound = payload[:play_sound] || false
+        @sound      = payload[:sound] || 'trombone'
       end
 
       def deliver!
@@ -24,21 +24,21 @@ module ScriptNotifier
 
         begin
           send_message_to_campfire(message)
-          return_values = { :success => true, :timestamp => Time.now.utc.iso8601 }
+          return_values = { :success => true, :sent_at => Time.now.utc.iso8601 }
 
         rescue ::Tinder::AuthenticationFailed
           error = {
                     :message => "ERROR: we could not deliver to your campfire room '#{@room_name}' on script #{script_name} due to an authentication failure, please check your settings.",
                     :type => 'AuthenticationFailed'
                   }
-          return_values = { :success => false, :timestamp => Time.now.utc.iso8601, :error => error }
+          return_values = { :success => false, :sent_at => Time.now.utc.iso8601, :error => error }
 
         rescue => e
           error = {
                     :message => "ERROR: we could not deliver to your campfire room '#{@room_name}' on script #{script_name} due to an internal error.",
                     :type => e.class.to_s
                   }
-          return_values = { :success => false, :timestamp => Time.now.utc.iso8601, :error => error }
+          return_values = { :success => false, :sent_at => Time.now.utc.iso8601, :error => error }
 
           error = "ScriptNotifier::Services::Campfire could not send message to '#{payload.inspect}' due to #{e.class}"
           ScriptNotifier.rescue_action_and_report(e, error)

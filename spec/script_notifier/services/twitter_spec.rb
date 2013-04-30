@@ -11,7 +11,7 @@ describe ScriptNotifier::Services::Twitter do
   end
 
   def notification(attrs = {})
-    sample_notifications.select { |n| n['service'] == 'twitter' }.first.merge!(attrs)
+    sample_notifications.select { |n| n[:service] == 'twitter' }.first.merge!(attrs)
   end
 
   subject { ScriptNotifier::Services::Twitter.new(failure_script_result, notification) }
@@ -22,8 +22,10 @@ describe ScriptNotifier::Services::Twitter do
 
   describe "deliver!" do
 
-    let(:address)         { notification['payload']['address'] }
-    let(:failure_message) { failure_script_result['failure_message'] }
+    let(:address)         { notification[:payload][:address] }
+    let(:site_name)       { failure_script_result[:site_name] }
+    let(:script_name)         { failure_script_result[:script_name] }
+    let(:failure_message) { failure_script_result[:failure_message] }
 
     context "without error from the provider" do
 
@@ -38,18 +40,18 @@ describe ScriptNotifier::Services::Twitter do
 
         time = Time.now
         Timecop.freeze(time) do
-          subject.deliver!.should eq({ :success => true, :timestamp => time.utc.iso8601 })
+          subject.deliver!.should eq({ :success => true, :sent_at => time.utc.iso8601 })
         end
       end
 
       it "sends the failure message to Twitter if the script failed" do
-        message = "#{address}: StillAlive FAIL: '#{failure_message}' on script #{failure_script_result['script_name']} for site #{failure_script_result['site_name']}"
+        message = "#{address}: StillAlive FAIL: '#{failure_message}' on script #{script_name} for site #{site_name}"
         Twitter.should_receive(:update).with(message)
         subject.deliver!
       end
 
       it "sends the success message to Twitter if the script passed" do
-        message = "#{address}: StillAlive PASS: Your script #{success_script_result['script_name']} for site #{success_script_result['site_name']} is now passing"
+        message = "#{address}: StillAlive PASS: Your script #{script_name} for site #{site_name} is now passing"
         service = ScriptNotifier::Services::Twitter.new(success_script_result, notification)
         Twitter.should_receive(:update).with(message)
         service.deliver!
@@ -69,7 +71,7 @@ describe ScriptNotifier::Services::Twitter do
                        }
         time = Time.now
         Timecop.freeze(time) do
-          subject.deliver!.should eq({ :success => false, :timestamp => time.utc.iso8601, :error => error_result })
+          subject.deliver!.should eq({ :success => false, :sent_at => time.utc.iso8601, :error => error_result })
         end
       end
 

@@ -11,7 +11,7 @@ describe ScriptNotifier::Services::HipChat do
   end
 
   def notification(attrs = {})
-    sample_notifications.select { |n| n['service'] == 'hip_chat' }.first.merge!(attrs)
+    sample_notifications.select { |n| n[:service] == 'hip_chat' }.first.merge!(attrs)
   end
 
   subject { ScriptNotifier::Services::HipChat.new(failure_script_result, notification) }
@@ -22,11 +22,11 @@ describe ScriptNotifier::Services::HipChat do
 
   describe "deliver!" do
 
-    let(:site_name) { failure_script_result['site_name'] }
-    let(:script_name) { failure_script_result['script_name'] }
-    let(:room_name)   { notification['payload']['room_name'] }
-    let(:failure_message) { failure_script_result['failure_message'] }
-    let(:failure_attempts) { failure_script_result['failure_attempts'] }
+    let(:site_name)   { failure_script_result[:site_name] }
+    let(:script_name) { failure_script_result[:script_name] }
+    let(:room_name)   { notification[:payload][:room_name] }
+    let(:failure_message) { failure_script_result[:failure_message] }
+    let(:failure_attempts) { failure_script_result[:failure_attempts] }
 
     context "without error from the provider" do
 
@@ -37,7 +37,7 @@ describe ScriptNotifier::Services::HipChat do
       it "returns a success hash" do
         time = Time.now
         Timecop.freeze(time) do
-          subject.deliver!.should eq({ :success => true, :timestamp => time.utc.iso8601 })
+          subject.deliver!.should eq({ :success => true, :sent_at => time.utc.iso8601 })
         end
       end
 
@@ -55,7 +55,7 @@ describe ScriptNotifier::Services::HipChat do
       end
 
       it "finds the HipChat client" do
-        api_token = notification['payload']['api_token']
+        api_token = notification[:payload][:api_token]
 
         service = ScriptNotifier::Services::HipChat.new(success_script_result, notification)
         client = mock('HipChatClient')
@@ -65,7 +65,7 @@ describe ScriptNotifier::Services::HipChat do
       end
 
       it "speaks into the hip_chat room with notification" do
-        room_name = notification['payload']['room_name']
+        room_name = notification[:payload][:room_name]
 
         service = ScriptNotifier::Services::HipChat.new(success_script_result, notification)
         client = mock('HipChatClient')
@@ -77,7 +77,7 @@ describe ScriptNotifier::Services::HipChat do
 
       it "speaks into the hip_chat room without sound" do
         no_alert_notification = notification
-        no_alert_notification['payload']['notify'] = nil
+        no_alert_notification[:payload][:notify] = nil
 
         service = ScriptNotifier::Services::HipChat.new(success_script_result, no_alert_notification)
         client = mock('HipChatClient')
@@ -101,7 +101,7 @@ describe ScriptNotifier::Services::HipChat do
                        }
         time = Time.now
         Timecop.freeze(time) do
-          subject.deliver!.should eq({ :success => false, :timestamp => time.utc.iso8601, :error => error_result })
+          subject.deliver!.should eq({ :success => false, :sent_at => time.utc.iso8601, :error => error_result })
         end
       end
 
@@ -115,7 +115,7 @@ describe ScriptNotifier::Services::HipChat do
                        }
         time = Time.now
         Timecop.freeze(time) do
-          subject.deliver!.should eq({ :success => false, :timestamp => time.utc.iso8601, :error => error_result })
+          subject.deliver!.should eq({ :success => false, :sent_at => time.utc.iso8601, :error => error_result })
         end
       end
 
@@ -129,7 +129,7 @@ describe ScriptNotifier::Services::HipChat do
                        }
         time = Time.now
         Timecop.freeze(time) do
-          subject.deliver!.should eq({ :success => false, :timestamp => time.utc.iso8601, :error => error_result })
+          subject.deliver!.should eq({ :success => false, :sent_at => time.utc.iso8601, :error => error_result })
         end
       end
 
@@ -142,7 +142,7 @@ describe ScriptNotifier::Services::HipChat do
                        }
         time = Time.now
         Timecop.freeze(time) do
-          subject.deliver!.should eq({ :success => false, :timestamp => time.utc.iso8601, :error => error_result })
+          subject.deliver!.should eq({ :success => false, :sent_at => time.utc.iso8601, :error => error_result })
         end
       end
 

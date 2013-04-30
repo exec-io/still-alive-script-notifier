@@ -8,9 +8,9 @@ module ScriptNotifier
       include Services::Base
 
       def after_initialize
-        @room_name  = payload['room_name']
-        @api_token  = payload['api_token']
-        @notify     = payload['notify'] == true ? 1 : 0
+        @room_name  = payload[:room_name]
+        @api_token  = payload[:api_token]
+        @notify     = payload[:notify] == true ? 1 : 0
       end
 
       def deliver!
@@ -22,35 +22,35 @@ module ScriptNotifier
 
         begin
           send_message_to_hip_chat(message)
-          return_values = { :success => true, :timestamp => Time.now.utc.iso8601 }
+          return_values = { :success => true, :sent_at => Time.now.utc.iso8601 }
 
         rescue ::HipChat::UnknownRoom
           error = {
                     :message => "ERROR: we could not find the HipChat room '#{@room_name}' on script #{script_name}, please check your settings.",
                     :type => 'UnknownRoom'
                   }
-          return_values = { :success => false, :timestamp => Time.now.utc.iso8601, :error => error }
+          return_values = { :success => false, :sent_at => Time.now.utc.iso8601, :error => error }
 
         rescue ::HipChat::Unauthorized
           error = {
                     :message => "ERROR: we could not deliver to your HipChat room '#{@room_name}' on script #{script_name} due to an authentication failure, please check your settings.",
                     :type => 'Unauthorized'
                   }
-          return_values = { :success => false, :timestamp => Time.now.utc.iso8601, :error => error }
+          return_values = { :success => false, :sent_at => Time.now.utc.iso8601, :error => error }
 
         rescue ::HipChat::UnknownResponseCode
           error = {
                     :message => "ERROR: we could not find the HipChat room '#{@room_name}' on script #{script_name}, due to a HipChat API error.",
                     :type => 'UnknownResponseCode'
                   }
-          return_values = { :success => false, :timestamp => Time.now.utc.iso8601, :error => error }
+          return_values = { :success => false, :sent_at => Time.now.utc.iso8601, :error => error }
 
         rescue => e
           error = {
                     :message => "ERROR: we could not deliver to your HipChat room '#{@room_name}' on script #{script_name} due to an internal error.",
                     :type => e.class.to_s
                   }
-          return_values = { :success => false, :timestamp => Time.now.utc.iso8601, :error => error }
+          return_values = { :success => false, :sent_at => Time.now.utc.iso8601, :error => error }
 
           error = "ScriptNotifier::Services::HipChat could not send message to '#{payload.inspect}' due to #{e.class}"
           ScriptNotifier.rescue_action_and_report(e, error)

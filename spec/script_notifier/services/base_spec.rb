@@ -32,7 +32,7 @@ describe ScriptNotifier::Services::Base do
   describe "base service" do
 
     it "sets the payload as an attr_reader" do
-      subject.payload.should eq(notification['payload'])
+      subject.payload.should eq(notification[:payload])
     end
 
     it "sets the notification as an attr_reader" do

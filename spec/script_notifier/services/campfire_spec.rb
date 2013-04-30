@@ -11,7 +11,7 @@ describe ScriptNotifier::Services::Campfire do
   end
 
   def notification(attrs = {})
-    sample_notifications.select { |n| n['service'] == 'campfire' }.first.merge!(attrs)
+    sample_notifications.select { |n| n[:service] == 'campfire' }.first.merge!(attrs)
   end
 
   subject { ScriptNotifier::Services::Campfire.new(failure_script_result, notification) }
@@ -22,11 +22,11 @@ describe ScriptNotifier::Services::Campfire do
 
   describe "deliver!" do
 
-    let(:site_name) { failure_script_result['site_name'] }
-    let(:script_name) { failure_script_result['script_name'] }
-    let(:room_name)   { notification['payload']['room_name'] }
-    let(:failure_message) { failure_script_result['failure_message'] }
-    let(:failure_attempts) { failure_script_result['failure_attempts'] }
+    let(:site_name) { failure_script_result[:site_name] }
+    let(:script_name) { failure_script_result[:script_name] }
+    let(:room_name)   { notification[:payload][:room_name] }
+    let(:failure_message) { failure_script_result[:failure_message] }
+    let(:failure_attempts) { failure_script_result[:failure_attempts] }
 
     context "without error from the provider" do
 
@@ -37,7 +37,7 @@ describe ScriptNotifier::Services::Campfire do
       it "returns a success hash" do
         time = Time.now
         Timecop.freeze(time) do
-          subject.deliver!.should eq({ :success => true, :timestamp => time.utc.iso8601 })
+          subject.deliver!.should eq({ :success => true, :sent_at => time.utc.iso8601 })
         end
       end
 
@@ -55,9 +55,9 @@ describe ScriptNotifier::Services::Campfire do
       end
 
       it "finds the campfire room" do
-        subdomain = notification['payload']['subdomain']
-        api_token = notification['payload']['api_token']
-        room_name = notification['payload']['room_name']
+        subdomain = notification[:payload][:subdomain]
+        api_token = notification[:payload][:api_token]
+        room_name = notification[:payload][:room_name]
 
         service = ScriptNotifier::Services::Campfire.new(success_script_result, notification)
         client = mock('TinderClient')
@@ -79,7 +79,7 @@ describe ScriptNotifier::Services::Campfire do
 
       it "speaks into the campfire room without sound" do
         no_sound_notification = notification
-        no_sound_notification['payload']['play_sound'] = false
+        no_sound_notification[:payload][:play_sound] = false
 
         service = ScriptNotifier::Services::Campfire.new(success_script_result, no_sound_notification)
         room = mock('TinderRoon')
@@ -104,7 +104,7 @@ describe ScriptNotifier::Services::Campfire do
                        }
         time = Time.now
         Timecop.freeze(time) do
-          subject.deliver!.should eq({ :success => false, :timestamp => time.utc.iso8601, :error => error_result })
+          subject.deliver!.should eq({ :success => false, :sent_at => time.utc.iso8601, :error => error_result })
         end
       end
 
@@ -117,7 +117,7 @@ describe ScriptNotifier::Services::Campfire do
                        }
         time = Time.now
         Timecop.freeze(time) do
-          subject.deliver!.should eq({ :success => false, :timestamp => time.utc.iso8601, :error => error_result })
+          subject.deliver!.should eq({ :success => false, :sent_at => time.utc.iso8601, :error => error_result })
         end
       end
 

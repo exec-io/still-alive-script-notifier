@@ -13,18 +13,19 @@ module ScriptNotifier
         result = send_notification(notification)
         @notifications[index].merge!(result)
       end
-      @script_data.merge({'notifications' => @notifications})
+
+      @script_data.merge({:notifications => @notifications})
     end
 
     private
 
     def extract_notifications
-      @notifications = @message['notifications']
-      @script_data = @message.reject { |k,v| k == 'notifications' }
+      @notifications = @message[:notifications]
+      @script_data = @message.reject { |k,v| k == :notifications }
     end
 
     def send_notification(notification)
-      case notification['service']
+      case notification[:service]
       when ScriptNotifier.test_run_mode
         Services::Tester.new(@script_data, notification).deliver!
       when 'sms'
@@ -34,8 +35,8 @@ module ScriptNotifier
       when 'twitter'
         Services::Twitter.new(@script_data, notification).deliver!
       else
-        ScriptNotifier.log("#{Time.now}: Don't have a #{notification['service']} service to use")
-        {'success' => false, 'sent_at' => Time.now.utc.iso8601, 'error' => "Can not process \"#{notification['service']}\" alerts at this time"}
+        ScriptNotifier.log("#{Time.now}: Don't have a #{notification[:service]} service to use")
+        {:success => false, :sent_at => Time.now.utc.iso8601, :error => {:type => 'ArgumentError', :message => "Can not process \"#{notification[:service]}\" alerts at this time"}}
       end
     end
 

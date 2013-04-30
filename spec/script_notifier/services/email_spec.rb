@@ -15,7 +15,7 @@ describe ScriptNotifier::Services::Email do
   end
 
   def notification(attrs = {})
-    sample_notifications.select { |n| n['service'] == 'email'}.first.merge!(attrs)
+    sample_notifications.select { |n| n[:service] == 'email'}.first.merge!(attrs)
   end
 
   subject { ScriptNotifier::Services::Email.new(failure_script_result, notification) }
@@ -26,8 +26,8 @@ describe ScriptNotifier::Services::Email do
 
   describe "deliver!" do
 
-    let(:address)         { notification['payload']['address'] }
-    let(:failure_message) { script_data['failure_message'] }
+    let(:address)         { notification[:payload][:address] }
+    let(:failure_message) { script_data[:failure_message] }
 
     context "on failure" do
 
@@ -42,7 +42,7 @@ describe ScriptNotifier::Services::Email do
       it "returns a success hash" do
         time = Time.now
         Timecop.freeze(time) do
-          subject.deliver!.should eq({ :success => true, :timestamp => time.utc.iso8601 })
+          subject.deliver!.should eq({ :success => true, :sent_at => time.utc.iso8601 })
         end
       end
 
@@ -70,7 +70,7 @@ describe ScriptNotifier::Services::Email do
       it "returns a success hash" do
         time = Time.now
         Timecop.freeze(time) do
-          subject.deliver!.should eq({ :success => true, :timestamp => time.utc.iso8601 })
+          subject.deliver!.should eq({ :success => true, :sent_at => time.utc.iso8601 })
         end
       end
 
@@ -96,7 +96,7 @@ describe ScriptNotifier::Services::Email do
                        }
         time = Time.now
         Timecop.freeze(time) do
-          subject.deliver!.should eq({ :success => false, :timestamp => time.utc.iso8601, :error => error_result })
+          subject.deliver!.should eq({ :success => false, :sent_at => time.utc.iso8601, :error => error_result })
         end
       end
 

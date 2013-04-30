@@ -8,8 +8,8 @@ module ScriptNotifier
       include Services::Base
 
       def after_initialize
-        @api_token  = payload['api_token']
-        @tags       = payload['tags'] || []
+        @api_token  = payload[:api_token]
+        @tags       = payload[:tags] || []
       end
 
       def deliver!
@@ -21,28 +21,28 @@ module ScriptNotifier
 
         begin
           send_message_to_flowdock(message)
-          return_values = { :success => true, :timestamp => Time.now.utc.iso8601 }
+          return_values = { :success => true, :sent_at => Time.now.utc.iso8601 }
 
         rescue ::Flowdock::Flow::InvalidParameterError
           error = {
                     :message => "ERROR: we could not deliver to your flowdock chat on script #{script_name} due to an invalid token or tag, please check your settings.",
                     :type => 'InvalidParameterError'
                   }
-          return_values = { :success => false, :timestamp => Time.now.utc.iso8601, :error => error }
+          return_values = { :success => false, :sent_at => Time.now.utc.iso8601, :error => error }
 
         rescue ::Flowdock::Flow::ApiError
           error = {
                     :message => "ERROR: we could not deliver to your flowdock chat on script #{script_name} due to a Flowdock API Error.",
                     :type => 'ApiError'
                   }
-          return_values = { :success => false, :timestamp => Time.now.utc.iso8601, :error => error }
+          return_values = { :success => false, :sent_at => Time.now.utc.iso8601, :error => error }
 
         rescue => e
           error = {
                     :message => "ERROR: we could not deliver to your flowdock chat on script #{script_name} due to an internal error.",
                     :type => e.class.to_s
                   }
-          return_values = { :success => false, :timestamp => Time.now.utc.iso8601, :error => error }
+          return_values = { :success => false, :sent_at => Time.now.utc.iso8601, :error => error }
 
           error = "ScriptNotifier::Services::Flowdock could not send message to '#{payload.inspect}' due to #{e.class}"
           ScriptNotifier.rescue_action_and_report(e, error)

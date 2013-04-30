@@ -60,7 +60,7 @@ module ScriptNotifier
 
     def get_next_notification
       json = receive_message_from_queue
-      JSON.parse(json)
+      JSON.parse(json, {:symbolize_names => true})
     rescue => ex
       ScriptNotifier.log "#{Time.now}: Error processing message #{json} got exception #{ex}"
       nil
