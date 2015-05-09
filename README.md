@@ -124,8 +124,9 @@ If the message is a success it reads:
       ]
     }
 
-Once the ScriptNotifier gets a notification, it sends out the notifications required.  Once done it
-is done, it logs the results of the notifications directly into the database.
+Once the ScriptNotifier gets a notification, it sends out the notifications required.
+Once done it is done, it logs the results of the notifications directly into the
+database.
 
 
 Development
